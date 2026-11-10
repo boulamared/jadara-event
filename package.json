@@ -1,0 +1,17 @@
+{
+  "name": "vente-solidaire-jadara",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "seed": "node --env-file=.env scripts/seed-sanity.mjs"
+  },
+  "dependencies": {
+    "@astrojs/node": "^11.1.11",
+    "@fontsource-variable/inter-tight": "^5.3.0",
+    "@sanity/client": "^8.15.1",
+    "astro": "^7.4.8"
+  }
+}

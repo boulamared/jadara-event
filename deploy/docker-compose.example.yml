@@ -1,0 +1,17 @@
+# À AJOUTER au docker-compose.yml qui contient déjà Caddy et vos deux autres sites.
+# Adaptez : le chemin de build, le nom du réseau partagé avec Caddy.
+services:
+  jadara:
+    build: ./jadara                # dossier du projet sur le VPS (celui qui contient le Dockerfile)
+    container_name: jadara
+    restart: unless-stopped
+    env_file: ./jadara/.env        # SANITY_PROJECT_ID, SANITY_DATASET, SANITY_WRITE_TOKEN, SITE_URL
+    expose:
+      - "4321"                     # pas de "ports:" : seul Caddy doit y accéder
+    networks:
+      - web                        # le réseau que Caddy utilise déjà
+
+# Si le réseau est déjà déclaré dans votre fichier, ne le redéclarez pas.
+# networks:
+#   web:
+#     external: true

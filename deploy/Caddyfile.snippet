@@ -1,0 +1,10 @@
+# À AJOUTER à votre Caddyfile existant. Remplacez le nom de domaine.
+# Caddy obtient et renouvelle le certificat HTTPS tout seul.
+jadara.votredomaine.com {
+	encode zstd gzip
+	reverse_proxy jadara:4321
+
+	# Les images et scripts fabriqués par Astro portent un hash dans leur nom : cache long.
+	@assets path /_astro/*
+	header @assets Cache-Control "public, max-age=31536000, immutable"
+}

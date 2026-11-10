@@ -1,0 +1,251 @@
+---
+import '@fontsource-variable/inter-tight';
+import '../styles/site.css';
+import { getContent } from '../lib/content';
+
+const { settings: s, categories, artists, lots } = await getContent();
+
+// Contenu mis en cache 60 s côté serveur ; le navigateur et Caddy peuvent garder la page 30 s.
+Astro.response.headers.set('Cache-Control', 'public, max-age=30, s-maxage=60');
+const origin = (process.env.SITE_URL || Astro.url.origin).replace(/\/$/, '');
+const catLabel = (id: string) => categories.find((c) => c.id === id)?.label ?? '';
+const artistName = (id: string) => artists.find((a) => a.id === id)?.name ?? '';
+const cats = categories.map((c) => ({ ...c, count: lots.filter((l) => l.category === c.id).length })).filter((c) => c.count);
+const activeArtists = artists.map((a) => ({ ...a, count: lots.filter((l) => l.artist === a.id).length })).filter((a) => a.count);
+const donate = s.donationUrl || '#oeuvres';
+
+// Si la photo du hero est celle d'un lot, on crédite l'artiste et on ouvre sa fiche.
+const heroLot = lots.find((l) => l.image === s.heroImage);
+
+// Éventail du hero : 7 œuvres réparties dans le catalogue (sans celle de la photo).
+const pool = lots.filter((l) => l !== heroLot);
+const step = Math.max(1, Math.floor(pool.length / 7));
+const fan = pool.filter((_, i) => i % step === 0).slice(0, 7);
+const ROT = [-12, -8, -4, 0, 4, 8, 12];
+const Y = [46, 20, 5, 0, 5, 20, 46];
+
+// Fenêtre d'accueil : texte du CMS, sinon généré à partir du catalogue.
+const popinText = s.popinText || `${lots.length} œuvres offertes par ${activeArtists.length} artistes et donateurs seront mises aux enchères. Présélectionnez dès maintenant celles qui vous plaisent : 100% des enchères sont reversées à Jadara.`;
+const popinLot = fan[2] ?? lots[0];
+
+const HEART = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19.5 12.6 12 20l-7.5-7.4a5 5 0 1 1 7.5-6.6 5 5 0 1 1 7.5 6.6Z"/></svg>';
+const X = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>';
+
+const title = 'Vente solidaire Jadara · Agile en Med 2026';
+const description = `Vente aux enchères solidaire au profit de Jadara. ${s.dateLabel}. 100% des enchères financent des bourses d'études.`;
+const clientData = { eventDate: s.eventDate, categories, artists, lots };
+---
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{title}</title>
+<meta name="description" content={description}>
+<meta property="og:title" content={title}>
+<meta property="og:description" content={description}>
+<meta property="og:type" content="website">
+<meta property="og:image" content={new URL(s.heroImage, origin + '/').href}>
+</head>
+<body>
+<a class="skip" href="#oeuvres">Aller aux œuvres</a>
+<header class="top"><div class="wrap">
+  <a class="brand" href="#top" aria-label="Vente solidaire Jadara, Agile en Med et Maltem Africa : haut de page">
+    <img src="/img/logo-jadara.png" alt="Jadara" width="300" height="255" style="--h:46px">
+    <img src="/img/logo-agile.png" alt="Agile en Med" width="640" height="234" style="--h:40px">
+    <img src="/img/logo-maltem.png" alt="Maltem Africa" width="640" height="189" style="--h:30px">
+  </a>
+  <a class="pill light sm" href={donate}>Faire un don</a>
+</div></header>
+
+<main id="top">
+<section class="hero">
+  <div class="wrap">
+    <div class="badge">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+      <span>{s.dateLabel}</span>
+    </div>
+    <h1>{s.heroTitle}</h1>
+    <p class="lead">{s.heroSub}</p>
+    <div class="cta">
+      <a class="pill light" href="#oeuvres">Découvrir les œuvres</a>
+      <a class="pill ghost" href="#pratique">Comment enchérir</a>
+    </div>
+    <div class="stats">
+      <div><b>{lots.length}</b><span>lots à enchérir</span></div>
+      <div><b>{activeArtists.length}</b><span>artistes &amp; donateurs</span></div>
+      <div><b>100%</b><span>reversé à Jadara</span></div>
+    </div>
+  </div>
+  <img class="hero-photo" src={s.heroImage} alt="" fetchpriority="high" />
+  <div class="fan">
+    {fan.map((l, i) => (
+      <button data-open={l.id} style={`--rot:${ROT[i]}deg;--y:${Y[i]}px;--i:${i}`} aria-label={`Voir la fiche : ${l.title}`}><img src={l.image} alt="" loading="eager" /></button>
+    ))}
+  </div>
+  {heroLot && <button class="credit" data-open={heroLot.id}>Photo : {artistName(heroLot.artist)} · Lot {heroLot.lot}</button>}
+</section>
+
+<section class="band">
+  <div class="wrap band-grid">
+    <div class="reveal">
+      <div class="eyebrow">Jadara</div>
+      <h2>Parce que le mérite ne devrait jamais dépendre des moyens.</h2>
+      <p>Association marocaine reconnue d'utilité publique, active depuis 2002, Jadara donne aux jeunes Marocains issus de milieux défavorisés les moyens de poursuivre leurs études, via des bourses et un accompagnement vers l'excellence académique.</p>
+    </div>
+    <div class="bigstat reveal"><b>+1,5M</b><span>jeunes de 15 à 24 ans sans emploi, études ni formation au Maroc</span></div>
+  </div>
+</section>
+
+<section id="oeuvres">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div><div class="eyebrow">À enchérir</div><h2>Les œuvres</h2></div>
+      <p class="lead">Un coup de cœur présélectionne l'œuvre sans engagement. Il aide Jadara à mesurer l'intérêt avant le jour J.</p>
+    </div>
+    <div class="filters" id="filters" role="group" aria-label="Filtrer les œuvres">
+      <button class="chip" data-cat="all" aria-pressed="true">Tout <span class="n">{lots.length}</span></button>
+      {cats.map((c) => (
+        <button class="chip" data-cat={c.id} aria-pressed="false">{c.label} <span class="n">{c.count}</span></button>
+      ))}
+      <button class="chip" data-fav aria-pressed="false"><Fragment set:html={HEART} /> Mes coups de cœur <span class="n" id="favCount">0</span></button>
+      <button class="chip" data-clear aria-pressed="true" id="artistChip" hidden><span></span> <Fragment set:html={X} /></button>
+    </div>
+    <div class="grid" id="grid">
+      {lots.map((l) => (
+        <article class="card" data-id={l.id} data-cat={l.category} data-artist={l.artist}>
+          <button class="media" data-open={l.id} aria-label={`Voir la fiche : ${l.title}, ${artistName(l.artist)}`}><img src={l.image} alt="" loading="lazy" /></button>
+          <span class="lotno">Lot {l.lot}</span>
+          <button class="like" data-like={l.id} data-title={l.title} aria-pressed="false" aria-label={`Ajouter à mes coups de cœur : ${l.title}`}><Fragment set:html={HEART} /><span>Coup de cœur</span></button>
+          <div class="meta">
+            <div class="by">{artistName(l.artist)}</div>
+            <h3 dir={l.rtl ? 'rtl' : undefined} lang={l.rtl ? 'ar' : undefined}>{l.title}</h3>
+            <div class="tech">{l.tech}</div>
+            <div class="foot">
+              {l.price ? <span class="price">{l.price}</span> : <span class="cat">{catLabel(l.category)}</span>}
+              <button class="more" data-open={l.id} tabindex="-1" aria-hidden="true">Voir la fiche <span>→</span></button>
+            </div>
+          </div>
+        </article>
+      ))}
+      <div class="empty" id="empty" hidden></div>
+    </div>
+  </div>
+</section>
+
+<section class="artists">
+  <div class="wrap">
+    <div class="sec-head reveal"><div><div class="eyebrow">Portraits</div><h2>Les artistes &amp; donateurs</h2></div></div>
+    <div class="alist">
+      {activeArtists.map((a) => (
+        <div class="arow">
+          <div class="nm">{a.name}</div><div class="rl">{a.role}</div>
+          <button class="pill light sm" data-artist={a.id}>{a.count} {a.count > 1 ? 'œuvres' : 'œuvre'}</button>
+          {a.bio && <details><summary>Lire le portrait</summary><p style="max-width:760px;padding:8px 0 4px">{a.bio}</p></details>}
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<section id="pratique">
+  <div class="wrap">
+    <div class="sec-head reveal"><div><div class="eyebrow">Pratique</div><h2>Comment enchérir</h2></div></div>
+    <div class="steps">
+      <div class="step reveal"><div class="num">1</div><div><h3>Repérez vos coups de cœur</h3><p>Parcourez la galerie et présélectionnez les œuvres qui vous intéressent. Nous vous tiendrons informé·e avant la vente.</p></div></div>
+      <div class="step reveal"><div class="num">2</div><div><h3>Enchérissez le 12 décembre</h3><p>Sur place à Agile en Med, ou en ligne si la vente est prolongée.</p></div></div>
+      <div class="step reveal"><div class="num">3</div><div><h3>100% reversé à Jadara</h3><p>L'intégralité de votre enchère finance directement une bourse d'études.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap"><div class="ally reveal">
+    <div class="eyebrow" style="color:rgba(255,255,255,.72)">Une alliance</div>
+    <h2>Agile en Med et Maltem Africa s'unissent à Jadara.</h2>
+    <p class="lead" style="margin-top:20px">Trois marques, trois rôles, une seule conviction : donner à chaque jeune les moyens de réussir.</p>
+    <div class="logos">
+      <div class="logo"><img src="img/logo-jadara.png" alt="Jadara"><span>Porte-voix et bénéficiaire</span></div>
+      <div class="logo"><img src="img/logo-agile.png" alt="Agile en Med"><span>Amplificateur événementiel</span></div>
+      <div class="logo"><img src="img/logo-maltem.png" alt="Maltem Africa"><span>Caution corporate &amp; RSE</span></div>
+    </div>
+  </div></div>
+</section>
+</main>
+
+<footer><div class="wrap">Vente solidaire au profit de Jadara · Agile en Med 2026 · Campus Mundiapolis</div></footer>
+
+<!-- Dock flottant -->
+<div class="dock" role="toolbar" aria-label="Barre d'accès rapide">
+  <span class="cd" id="countdown">J-—</span>
+  <span class="pct" id="pct" aria-hidden="true">0%</span>
+  <button class="sel" id="openSel" aria-controls="drawer" aria-expanded="false">Ma sélection <b id="selCount">0</b></button>
+</div>
+
+<!-- Formulaire contact -->
+<div class="scrim" id="leadScrim" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="leadTitle">
+    <button class="x" data-close aria-label="Fermer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    <div id="formView">
+      <h2 id="leadTitle">Cette œuvre vous plaît ?</h2>
+      <p class="sub">Laissez-nous vos coordonnées : nous vous préviendrons avant l'ouverture des enchères. Une seule fois, pour tous vos coups de cœur.</p>
+      <div class="chosen" id="chosen"></div>
+      <form id="leadForm" novalidate>
+        <div class="formerr" id="formErr" role="alert" hidden></div>
+        <div class="hp" aria-hidden="true"><label for="website">Ne pas remplir</label><input type="text" id="website" name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="row2">
+          <div class="field" id="f-prenom"><label for="prenom">Prénom</label><input type="text" id="prenom" autocomplete="given-name" required><div class="msg" role="alert">Merci d'indiquer votre prénom.</div></div>
+          <div class="field" id="f-nom"><label for="nom">Nom</label><input type="text" id="nom" autocomplete="family-name" required><div class="msg" role="alert">Merci d'indiquer votre nom.</div></div>
+        </div>
+        <div class="field" id="f-email"><label for="email">E-mail</label><input type="email" id="email" autocomplete="email" inputmode="email" required><div class="msg" role="alert">Merci d'indiquer une adresse e-mail valide.</div></div>
+        <div class="field" id="f-consent"><label class="check" for="consent"><input type="checkbox" id="consent" required><span>J'accepte d'être recontacté·e par Jadara, Agile en Med et Maltem Africa au sujet de cette vente solidaire.</span></label><div class="msg" role="alert">Merci de cocher cette case pour continuer.</div></div>
+        <button class="pill dark" type="submit">Être tenu·e informé·e</button>
+      </form>
+      <p class="legal">Vos données sont utilisées uniquement pour l'organisation de cette vente. Conformément à la loi 09-08, vous disposez d'un droit d'accès, de rectification et d'opposition.</p>
+    </div>
+    <div id="okView" hidden>
+      <div class="ok-ic"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+      <h2>Merci <span id="okName"></span> !</h2>
+      <p class="sub">C'est noté. Vos prochains coups de cœur s'ajoutent en un clic, sans ressaisir vos coordonnées.</p>
+      <button class="pill dark" data-close>Continuer la visite</button>
+    </div>
+  </div>
+</div>
+
+<!-- Fenêtre d'accueil (une fois par visiteur) -->
+{s.popinEnabled && popinLot && (
+  <div class="scrim" id="welcomeScrim" aria-hidden="true">
+    <div class="modal wide welcome" role="dialog" aria-modal="true" aria-labelledby="welcomeTitle">
+      <button class="x" data-close aria-label="Fermer"><Fragment set:html={X} /></button>
+      <div class="pic"><img src={popinLot.image} alt={`${popinLot.title}, ${artistName(popinLot.artist)}`} loading="lazy" /></div>
+      <div class="welcome-body">
+        <div class="welcome-tags"><span class="tag gold" data-countdown>Bientôt</span><span class="tag">{s.dateLabel}</span></div>
+        <h2 id="welcomeTitle">{s.popinTitle}</h2>
+        <p class="sub">{popinText}</p>
+        <a class="pill dark" href="#oeuvres" data-close>Découvrir les œuvres</a>
+        <button class="pill light" data-close>Plus tard</button>
+      </div>
+    </div>
+  </div>
+)}
+
+<!-- Fiche œuvre -->
+<div class="scrim" id="lotScrim" aria-hidden="true">
+  <div class="modal wide" role="dialog" aria-modal="true" aria-labelledby="lotTitle" id="lotModal"></div>
+</div>
+
+<!-- Ma sélection -->
+<aside class="drawer" id="drawer" aria-label="Ma sélection">
+  <header><h2>Ma sélection</h2><button class="x" id="closeSel" aria-label="Fermer ma sélection"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></header>
+  <ul id="selList"></ul>
+  <div class="foot" id="selFoot"></div>
+</aside>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script type="application/json" id="site-data" set:html={JSON.stringify(clientData).replace(/</g, '\\u003c')}></script>
+<script>
+  import '../scripts/app.js';
+</script>
+</body>
+</html>

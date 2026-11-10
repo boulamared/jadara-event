@@ -1,0 +1,93 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Un seul déploiement à la fois ; un nouveau push attend la fin du précédent.
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Vérifier le build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+
+  deploy:
+    name: Déployer sur le VPS
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: production
+    env:
+      VPS_HOST: ${{ secrets.VPS_HOST }}
+      VPS_USER: ${{ secrets.VPS_USER }}
+      VPS_PORT: ${{ vars.VPS_PORT || '22' }}
+      # Dossier du projet sur le VPS (contient le Dockerfile et le .env du serveur).
+      APP_DIR: ${{ vars.VPS_APP_DIR }}
+      # Dossier du docker-compose.yml qui contient Caddy et le service "jadara".
+      # Par défaut : le dossier parent de APP_DIR.
+      COMPOSE_DIR: ${{ vars.VPS_COMPOSE_DIR }}
+      SERVICE: ${{ vars.VPS_SERVICE || 'jadara' }}
+      SITE_URL: ${{ vars.SITE_URL }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configurer SSH
+        env:
+          SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+          KNOWN_HOSTS: ${{ secrets.VPS_KNOWN_HOSTS }}
+        run: |
+          for v in VPS_HOST VPS_USER APP_DIR SITE_URL; do
+            [ -n "${!v}" ] || { echo "::error::Variable ou secret manquant : $v"; exit 1; }
+          done
+          [ -n "$SSH_KEY" ] && [ -n "$KNOWN_HOSTS" ] || { echo "::error::Secrets VPS_SSH_KEY et VPS_KNOWN_HOSTS requis"; exit 1; }
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+          cat > ~/.ssh/config <<CFG
+          Host vps
+            HostName $VPS_HOST
+            User $VPS_USER
+            Port $VPS_PORT
+            IdentityFile ~/.ssh/deploy_key
+            IdentitiesOnly yes
+            StrictHostKeyChecking yes
+          CFG
+
+      - name: Copier le code sur le VPS
+        run: |
+          rsync -az --delete \
+            --exclude '.git' --exclude '.github' --exclude 'node_modules' --exclude 'dist' \
+            --exclude 'studio' --exclude '.env' --exclude '.env.*' --exclude '.data' --exclude '.astro' \
+            ./ "vps:${APP_DIR%/}/"
+
+      - name: Reconstruire et relancer le conteneur
+        run: |
+          ssh vps bash -s -- "$APP_DIR" "$COMPOSE_DIR" "$SERVICE" <<'REMOTE'
+          set -euo pipefail
+          app_dir="$1"; compose_dir="${2:-$(dirname "$app_dir")}"; service="$3"
+          test -f "$app_dir/.env" || { echo "Fichier $app_dir/.env absent sur le serveur" >&2; exit 1; }
+          cd "$compose_dir"
+          docker compose up -d --build "$service"
+          docker image prune -f >/dev/null
+          REMOTE
+
+      - name: Vérifier que le site répond
+        run: |
+          curl -fsS --retry 12 --retry-delay 5 --retry-all-errors --max-time 10 \
+            "${SITE_URL%/}/healthz"

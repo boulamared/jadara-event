@@ -1,0 +1,611 @@
+{
+  "settings": {
+    "eventDate": "2026-12-12",
+    "dateLabel": "12 décembre 2026 · Campus Mundiapolis",
+    "heroTitle": "Chaque œuvre finance une bourse.",
+    "heroSub": "Des artistes offrent une œuvre. 100% des enchères financent les études de jeunes Marocains, souvent orphelins ou en situation précaire, accompagnés par Jadara.",
+    "donationUrl": "",
+    "heroImage": "/img/guyard.webp",
+    "popinEnabled": true,
+    "popinTitle": "Votre coup de cœur peut financer une bourse.",
+    "popinText": ""
+  },
+  "categories": [
+    {
+      "id": "peinture",
+      "label": "Peinture & dessin"
+    },
+    {
+      "id": "mode",
+      "label": "Mode & design"
+    },
+    {
+      "id": "sculpture",
+      "label": "Sculpture"
+    },
+    {
+      "id": "photo",
+      "label": "Photographie"
+    },
+    {
+      "id": "table",
+      "label": "Art de la table"
+    }
+  ],
+  "artists": [
+    {
+      "id": "benbella",
+      "name": "Abdelhadi Benbella",
+      "role": "Peintre",
+      "bio": "Né en 1974 à Mohammedia. Une œuvre à la croisée de l'abstraction, du surréalisme et de l'expressionnisme figuratif, nourrie de culture marocaine et berbère. Président de l'ANPA, il signe une fresque de 12 mètres installée à la Cour suprême de Rabat."
+    },
+    {
+      "id": "semaille",
+      "name": "Marc Semaille",
+      "role": "Peintre & dessinateur",
+      "bio": "Artiste français installé au Maroc, il rend hommage à la splendeur de la nature — et des chevaux en particulier — dans un art minutieux qui allie méthodes traditionnelles et innovations modernes."
+    },
+    {
+      "id": "sefraoui",
+      "name": "Abdessalam Sefraoui",
+      "role": "Peintre",
+      "bio": "Autodidacte né en 1983 à Casablanca, il peint depuis l'âge de 11 ans. Sa peinture fusionne abstraction et figuration, lumière et obscurité, dans un dialogue entre le réel et l'imaginaire."
+    },
+    {
+      "id": "warrak",
+      "name": "Mustapha Warrak",
+      "role": "Peintre",
+      "bio": "Né en 1965 à Casablanca, diplômé des Beaux-Arts de Casablanca. Entre abstraction lyrique et figuration contemporaine. Exposé notamment à Barcelone en 2015."
+    },
+    {
+      "id": "kalmoun",
+      "name": "Abdelhamid Kalmoun",
+      "role": "Peintre",
+      "bio": "Peintre autodidacte né en 1954 à Azemmour. Figures et signes, palette chromatique riche. Exposé en France, en Allemagne, en Turquie et en Chine ; 3ᵉ prix de la Fondation Wafabank en 1989."
+    },
+    {
+      "id": "guermai",
+      "name": "Lamia El Guermai",
+      "role": "Peintre",
+      "bio": "Peintre autodidacte, docteure en économie et gestion, écrivaine. Née et basée à Casablanca. Co-fondatrice du collectif « Les Passionnées d'Art ». Un univers surréaliste aux couleurs vives et fluorescentes."
+    },
+    {
+      "id": "fhima",
+      "name": "Steve Fhima",
+      "role": "Artiste contemporain",
+      "bio": "Né en 1970, il explore la lumière et l'obscurité dans une œuvre dense en émotion. Également collectionneur et mentor pour de nombreux artistes."
+    },
+    {
+      "id": "feriani",
+      "name": "Imane Feriani",
+      "role": "Peintre",
+      "bio": "Artiste engagée, elle met en lumière les récits de femmes courageuses. Ses œuvres mêlent transparence, contrastes et techniques mixtes, intégrant bois, coquillages et tissu."
+    },
+    {
+      "id": "sarab",
+      "name": "Sara B",
+      "role": "Peintre",
+      "bio": "Née en 1983, autodidacte, elle renaît sur la scène artistique après douze années de silence. Son univers onirique fusionne surréalisme, art contemporain et spiritualité."
+    },
+    {
+      "id": "chamlani",
+      "name": "Otmane Chamlani",
+      "role": "Peintre & sculpteur",
+      "bio": "Né en 1971 à Rabat, autodidacte. Auteur d'un tableau de 99 mètres réalisé avec Amnesty International, co-fondateur du groupe Naqs Al-Fan et initiateur du programme Communication Bridge."
+    },
+    {
+      "id": "chaoui",
+      "name": "Malak Chaoui Arsaoui",
+      "role": "Peintre & photographe",
+      "bio": "Née en 1977 à Casablanca, photographe professionnelle et peintre autodidacte, nourrie de culture sénégalaise. Exposée à Paris, Dakar et Abidjan."
+    },
+    {
+      "id": "belghiti",
+      "name": "Mustapha Belghiti",
+      "role": "Peintre",
+      "bio": "Né en 1996 dans le sud du Maroc, étudiant en droit et auteur d'histoires pour enfants. Maître du pointillisme au stylo à bille, il raconte l'histoire de sa communauté et de son pays."
+    },
+    {
+      "id": "ausalah",
+      "name": "Nadia Ausalah",
+      "role": "Peintre",
+      "bio": "Née à Tanger, présidente de l'association des médecins artistes peintres. Passée par l'art dramatique et la calligraphie, elle peint entre figuratif et abstrait."
+    },
+    {
+      "id": "bouhlal",
+      "name": "Riad Bouhlal",
+      "role": "Peintre",
+      "bio": "Médecin, il commence la peinture à 56 ans, bouleversé par les impressionnistes du Musée d'Orsay. Première exposition en 2015 ; depuis la pandémie, il explore l'abstraction."
+    },
+    {
+      "id": "chellaoui",
+      "name": "Nadia Chellaoui",
+      "role": "Peintre & créatrice de mode",
+      "bio": "Née en 1973 à Rabat, autodidacte. Ses visages colorés dominés par le bleu ont été exposés à la Biennale de Monaco et au Carrousel du Louvre. Représentée à Madrid, Turin et en Alsace."
+    },
+    {
+      "id": "laraichi",
+      "name": "Nawal Laraichi",
+      "role": "Peintre",
+      "bio": "Née en 1969 à Kénitra, chirurgienne-dentiste. Elle expose depuis 2020 avec le collectif des Médecins Artistes, notamment au centre culturel d'Anfa."
+    },
+    {
+      "id": "achour",
+      "name": "Hanane Achour",
+      "role": "Artiste",
+      "bio": "Une série de trois portraits au trait et aplats de couleur, présentée sous le titre « Si je peux voir la vie autrement »."
+    },
+    {
+      "id": "boussouni",
+      "name": "Salima El Boussouni",
+      "role": "Haute couture",
+      "bio": "À la tête de la maison Caftan Skalli, héritée de sa grand-mère. Diplômée de HEC, de l'ISCAE et de l'Académie des Arts et du Design de Montréal, elle marie artisanat traditionnel et expertise moderne."
+    },
+    {
+      "id": "vauthrin",
+      "name": "Christelle Vauthrin",
+      "role": "Sculptrice",
+      "bio": "Plasticienne autodidacte d'origine marocaine. Artisan d'art en France dès 2003 (porcelaine, verre, salon Maison & Objet), puis enseignante à Casablanca. Art-thérapeute certifiée depuis 2019."
+    },
+    {
+      "id": "guyard",
+      "name": "Julien Guyard",
+      "role": "Photographe",
+      "bio": "Installé à Casablanca depuis 2007. Sa série consacrée aux monuments marocains sous la pleine lune est tirée en éditions limitées, certifiées et accompagnées d'un NFT. Il dirige l'agence Caméléon Média."
+    },
+    {
+      "id": "berrada",
+      "name": "Fadoua Berrada",
+      "role": "Designer",
+      "bio": "Diplômée de l'ISCAE, elle fonde en 2010 sa marque de porcelaine BY FB (collections limitées pour la table et le tea time). Auteure en 2015 d'une toile de 100 m² en pixel art dédiée à la jeunesse marocaine."
+    },
+    {
+      "id": "simo",
+      "name": "Chef Simo",
+      "role": "Donateur",
+      "bio": "MasterChef Maroc 2018, chef le plus suivi du monde arabe et premier chef marocain inscrit au Guinness Book. Il offre une sélection de pièces d'artisanat marocain de sa collection."
+    }
+  ],
+  "lots": [
+    {
+      "id": "benbella",
+      "lot": 1,
+      "category": "peinture",
+      "artist": "benbella",
+      "title": "رحلة انقاد",
+      "rtl": true,
+      "tech": "Peinture sur toile · 100 × 800 cm",
+      "price": "",
+      "image": "/img/benbella.webp"
+    },
+    {
+      "id": "semaille-aigle",
+      "lot": 2,
+      "category": "peinture",
+      "artist": "semaille",
+      "title": "Aigle d'Indonésie",
+      "rtl": false,
+      "tech": "Pierre noire et lavis bleu · 98 × 62 cm",
+      "price": "",
+      "image": "/img/semaille-aigle.webp"
+    },
+    {
+      "id": "semaille-barbe",
+      "lot": 3,
+      "category": "peinture",
+      "artist": "semaille",
+      "title": "Cheval barbe",
+      "rtl": false,
+      "tech": "Huile sur papier · 100 × 65 cm",
+      "price": "",
+      "image": "/img/semaille-barbe.webp"
+    },
+    {
+      "id": "semaille-frison",
+      "lot": 4,
+      "category": "peinture",
+      "artist": "semaille",
+      "title": "Frison au galop",
+      "rtl": false,
+      "tech": "Pastel · 130 × 90 cm",
+      "price": "",
+      "image": "/img/semaille-frison.webp"
+    },
+    {
+      "id": "semaille-pursang",
+      "lot": 5,
+      "category": "peinture",
+      "artist": "semaille",
+      "title": "Pur-sang arabe",
+      "rtl": false,
+      "tech": "Huile sur toile · 115 × 90 cm",
+      "price": "",
+      "image": "/img/semaille-pursang.webp"
+    },
+    {
+      "id": "semaille-cavaliere",
+      "lot": 6,
+      "category": "peinture",
+      "artist": "semaille",
+      "title": "Cavalière au galop sur selle français",
+      "rtl": false,
+      "tech": "Pastel · 65 × 60 cm",
+      "price": "",
+      "image": "/img/semaille-cavaliere.webp"
+    },
+    {
+      "id": "semaille-jument",
+      "lot": 7,
+      "category": "peinture",
+      "artist": "semaille",
+      "title": "Jument arabe au galop",
+      "rtl": false,
+      "tech": "Pierre noire · 100 × 66 cm",
+      "price": "",
+      "image": "/img/semaille-jument.webp"
+    },
+    {
+      "id": "sefraoui",
+      "lot": 8,
+      "category": "peinture",
+      "artist": "sefraoui",
+      "title": "Village Haouz",
+      "rtl": false,
+      "tech": "Technique mixte sur toile · 120 × 80 cm",
+      "price": "",
+      "image": "/img/sefraoui.webp"
+    },
+    {
+      "id": "warrak",
+      "lot": 9,
+      "category": "peinture",
+      "artist": "warrak",
+      "title": "Sans titre",
+      "rtl": false,
+      "tech": "Technique mixte sur toile · 100 × 100 cm",
+      "price": "",
+      "image": "/img/warrak.webp"
+    },
+    {
+      "id": "kalmoun",
+      "lot": 10,
+      "category": "peinture",
+      "artist": "kalmoun",
+      "title": "Sans titre",
+      "rtl": false,
+      "tech": "Peinture · 120 × 100 cm",
+      "price": "",
+      "image": "/img/kalmoun.webp"
+    },
+    {
+      "id": "guermai-eveil",
+      "lot": 11,
+      "category": "peinture",
+      "artist": "guermai",
+      "title": "L'Éveil",
+      "rtl": false,
+      "tech": "Techniques mixtes · 160 × 180 cm",
+      "price": "",
+      "image": "/img/guermai-eveil.webp"
+    },
+    {
+      "id": "guermai-collective",
+      "lot": 12,
+      "category": "peinture",
+      "artist": "guermai",
+      "title": "Conscience collective",
+      "rtl": false,
+      "tech": "Techniques mixtes · 140 × 70 cm",
+      "price": "",
+      "image": "/img/guermai-collective.webp"
+    },
+    {
+      "id": "fhima",
+      "lot": 13,
+      "category": "peinture",
+      "artist": "fhima",
+      "title": "Casablanca",
+      "rtl": false,
+      "tech": "Peinture",
+      "price": "",
+      "image": "/img/fhima.webp"
+    },
+    {
+      "id": "feriani-organza",
+      "lot": 14,
+      "category": "peinture",
+      "artist": "feriani",
+      "title": "Sans titre",
+      "rtl": false,
+      "tech": "Peinture et spray acrylique sur toile et organza · 70 × 70 cm",
+      "price": "",
+      "image": "/img/feriani-organza.webp"
+    },
+    {
+      "id": "feriani-lavandine",
+      "lot": 15,
+      "category": "peinture",
+      "artist": "feriani",
+      "title": "Lavandine",
+      "rtl": false,
+      "tech": "Technique mixte sur toile · 95 × 95 cm",
+      "price": "",
+      "image": "/img/feriani-lavandine.webp"
+    },
+    {
+      "id": "sarab-16",
+      "lot": 16,
+      "category": "peinture",
+      "artist": "sarab",
+      "title": "Sans titre",
+      "rtl": false,
+      "tech": "Technique mixte sur toile",
+      "price": "",
+      "image": "/img/sarab-16.webp"
+    },
+    {
+      "id": "sarab-enchantement",
+      "lot": 17,
+      "category": "peinture",
+      "artist": "sarab",
+      "title": "Enchantement",
+      "rtl": false,
+      "tech": "Technique mixte sur toile · 1000 × 1000 cm",
+      "price": "",
+      "image": "/img/sarab-enchantement.webp"
+    },
+    {
+      "id": "chamlani",
+      "lot": 18,
+      "category": "peinture",
+      "artist": "chamlani",
+      "title": "L'Âme des femmes",
+      "rtl": false,
+      "tech": "Peinture sur toile",
+      "price": "",
+      "image": "/img/chamlani.webp"
+    },
+    {
+      "id": "chaoui",
+      "lot": 19,
+      "category": "peinture",
+      "artist": "chaoui",
+      "title": "Fenêtre sur l'inconnu",
+      "rtl": false,
+      "tech": "Technique mixte sur toile · 100 × 80 cm",
+      "price": "",
+      "image": "/img/chaoui.webp"
+    },
+    {
+      "id": "belghiti",
+      "lot": 20,
+      "category": "peinture",
+      "artist": "belghiti",
+      "title": "Sans titre",
+      "rtl": false,
+      "tech": "Pointillisme au stylo à bille",
+      "price": "",
+      "image": "/img/belghiti.webp"
+    },
+    {
+      "id": "ausalah",
+      "lot": 21,
+      "category": "peinture",
+      "artist": "ausalah",
+      "title": "Sans titre",
+      "rtl": false,
+      "tech": "Technique mixte sur toile · 50 × 60 cm",
+      "price": "",
+      "image": "/img/ausalah.webp"
+    },
+    {
+      "id": "bouhlal",
+      "lot": 22,
+      "category": "peinture",
+      "artist": "bouhlal",
+      "title": "Sans titre",
+      "rtl": false,
+      "tech": "Acrylique sur toile · 60 × 50 cm",
+      "price": "",
+      "image": "/img/bouhlal.webp"
+    },
+    {
+      "id": "chellaoui",
+      "lot": 23,
+      "category": "peinture",
+      "artist": "chellaoui",
+      "title": "Au-delà des ombres",
+      "rtl": false,
+      "tech": "Technique mixte sur bois · 100 × 100 cm",
+      "price": "",
+      "image": "/img/chellaoui.webp"
+    },
+    {
+      "id": "laraichi",
+      "lot": 24,
+      "category": "peinture",
+      "artist": "laraichi",
+      "title": "Triptyque",
+      "rtl": false,
+      "tech": "Acrylique sur toile · 18 × 13 cm (21 × 32 cm encadré), 3 pièces",
+      "price": "",
+      "image": "/img/laraichi.webp"
+    },
+    {
+      "id": "boussouni",
+      "lot": 25,
+      "category": "mode",
+      "artist": "boussouni",
+      "title": "Création haute couture",
+      "rtl": false,
+      "tech": "Maison Caftan Skalli",
+      "price": "",
+      "image": "/img/boussouni.webp"
+    },
+    {
+      "id": "vauthrin",
+      "lot": 26,
+      "category": "sculpture",
+      "artist": "vauthrin",
+      "title": "Double-Je",
+      "rtl": false,
+      "tech": "Acrylique sur bois résiné · 57 × 20 × 50 cm",
+      "price": "",
+      "image": "/img/vauthrin.webp"
+    },
+    {
+      "id": "guyard",
+      "lot": 27,
+      "category": "photo",
+      "artist": "guyard",
+      "title": "La Mosquée Hassan II et la Pleine Lune",
+      "rtl": false,
+      "tech": "Photographie · tirage limité à 10 ex., certificat + NFT",
+      "price": "",
+      "image": "/img/guyard.webp"
+    },
+    {
+      "id": "berrada",
+      "lot": 28,
+      "category": "table",
+      "artist": "berrada",
+      "title": "Plats rectangulaires BY FB",
+      "rtl": false,
+      "tech": "Porcelaine fine · 28 × 16 cm",
+      "price": "",
+      "image": "/img/berrada.webp"
+    },
+    {
+      "id": "simo-pot",
+      "lot": 29,
+      "category": "table",
+      "artist": "simo",
+      "title": "Grand pot mauresque à couvercle",
+      "rtl": false,
+      "tech": "Céramique bleue et blanche de Fès, sur pieds",
+      "price": "",
+      "image": "/img/simo-pot.webp"
+    },
+    {
+      "id": "simo-vase",
+      "lot": 30,
+      "category": "table",
+      "artist": "simo",
+      "title": "Vase marocain ancien à couvercle",
+      "rtl": false,
+      "tech": "Céramique de Fès, filigrane argenté",
+      "price": "",
+      "image": "/img/simo-vase.webp"
+    },
+    {
+      "id": "simo-assiette1",
+      "lot": 31,
+      "category": "table",
+      "artist": "simo",
+      "title": "Assiette en céramique de Fès",
+      "rtl": false,
+      "tech": "Céramique marocaine, filigrane argenté",
+      "price": "",
+      "image": "/img/simo-assiette1.webp"
+    },
+    {
+      "id": "simo-plat",
+      "lot": 32,
+      "category": "table",
+      "artist": "simo",
+      "title": "Plat en céramique émaillée",
+      "rtl": false,
+      "tech": "Céramique émaillée, ornements en métal",
+      "price": "",
+      "image": "/img/simo-plat.webp"
+    },
+    {
+      "id": "simo-bols",
+      "lot": 33,
+      "category": "table",
+      "artist": "simo",
+      "title": "Bol en céramique de Fès",
+      "rtl": false,
+      "tech": "Céramique marocaine, filigrane argenté",
+      "price": "",
+      "image": "/img/simo-bols.webp"
+    },
+    {
+      "id": "simo-assiette2",
+      "lot": 34,
+      "category": "table",
+      "artist": "simo",
+      "title": "Assiette en céramique de Fès",
+      "rtl": false,
+      "tech": "Céramique marocaine, filigrane argenté",
+      "price": "",
+      "image": "/img/simo-assiette2.webp"
+    },
+    {
+      "id": "simo-cuivre",
+      "lot": 35,
+      "category": "table",
+      "artist": "simo",
+      "title": "Récipient à couvercle",
+      "rtl": false,
+      "tech": "Cuivre martelé",
+      "price": "",
+      "image": "/img/simo-cuivre.webp"
+    },
+    {
+      "id": "simo-the",
+      "lot": 36,
+      "category": "table",
+      "artist": "simo",
+      "title": "Service à thé 4 pièces",
+      "rtl": false,
+      "tech": "Laiton cuivré",
+      "price": "",
+      "image": "/img/simo-the.webp"
+    },
+    {
+      "id": "simo-casseroles",
+      "lot": 37,
+      "category": "table",
+      "artist": "simo",
+      "title": "Ensemble de 3 casseroles",
+      "rtl": false,
+      "tech": "Cuivre",
+      "price": "",
+      "image": "/img/simo-casseroles.webp"
+    },
+    {
+      "id": "simo-jarres",
+      "lot": 38,
+      "category": "table",
+      "artist": "simo",
+      "title": "Ensemble de 5 jarres berbères anciennes",
+      "rtl": false,
+      "tech": "Terre cuite · 1819",
+      "price": "",
+      "image": "/img/simo-jarres.webp"
+    },
+    {
+      "id": "achour",
+      "lot": 39,
+      "category": "peinture",
+      "artist": "achour",
+      "title": "Si je peux voir la vie autrement",
+      "rtl": false,
+      "tech": "Série de 3 dessins",
+      "price": "",
+      "image": "/img/achour.webp"
+    },
+    {
+      "id": "calipsoh",
+      "lot": 40,
+      "category": "mode",
+      "artist": "chellaoui",
+      "title": "Sac Calips'Oh",
+      "rtl": false,
+      "tech": "Collection automne-hiver 24/25 · modèle porté par Lily Collins dans Emily in Paris (S3, ép. 2)",
+      "price": "Prix de départ : 4 590 DH",
+      "image": "/img/calipsoh.webp"
+    }
+  ]
+}
