@@ -4,3 +4,9 @@ dist
 .vercel
 .env
 .data
+
+# Clés de déploiement : ne jamais les versionner
+jadara_deploy
+jadara_deploy.pub
+*_deploy
+*_deploy.pub

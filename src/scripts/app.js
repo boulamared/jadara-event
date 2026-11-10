@@ -78,10 +78,39 @@ function syncLikes() {
     ? items.map((l) => '<li><img src="' + esc(l.image) + '" alt=""><div><b>' + esc(l.title) + '</b>Lot ' + l.lot + ' · ' + esc(artistName(l)) + '</div><button data-like="' + esc(l.id) + '" aria-label="Retirer ' + esc(l.title) + ' de ma sélection">' + X + '</button></li>').join('')
     : '<li style="border:0;color:var(--muted)">Votre sélection est vide. Touchez le cœur d\'une œuvre pour la retrouver ici.</li>';
   $('#selFoot').textContent = contact && items.length ? "Nous vous écrirons à " + contact.email + " avant l'ouverture des enchères." : '';
+  $('#selShare').hidden = !items.length;
+  if (items.length) {
+    const text = selectionText(items);
+    const subject = 'Ma sélection · Vente solidaire Jadara';
+    $('#actMail').href = 'mailto:' + (contact ? encodeURIComponent(contact.email) : '') + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(text);
+    $('#actWa').href = 'https://wa.me/?text=' + encodeURIComponent(text);
+  }
   if (filter.fav) applyFilter();
   renderLotModal();
   store.set('vsj_likes', [...liked]);
 }
+
+/* ---------- Partage et export de la sélection ---------- */
+function selectionText(items) {
+  return ['Ma sélection · Vente solidaire Jadara · Agile en Med 2026', data.dateLabel || '', '']
+    .concat(items.map((l) => '• Lot ' + l.lot + ' · ' + l.title + ' — ' + artistName(l)))
+    .concat(['', 'Voir les œuvres : ' + data.siteUrl]).join('\n');
+}
+function selectionItems() { return [...liked].map((id) => LOTS.get(id)); }
+$('#actCopy').addEventListener('click', async () => {
+  try { await navigator.clipboard.writeText(selectionText(selectionItems())); toast('Liste copiée'); }
+  catch { toast('Copie impossible sur ce navigateur.', true); }
+});
+$('#actCsv').addEventListener('click', () => {
+  const cell = (v) => '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"';
+  const rows = [['Lot', 'Titre', 'Artiste', 'Catégorie', 'Technique', 'Prix']]
+    .concat(selectionItems().map((l) => [l.lot, l.title, artistName(l), CATS.get(l.category) || '', l.tech, l.price || '']));
+  // BOM + point-virgule : Excel en français ouvre le fichier directement.
+  const blob = new Blob(['﻿' + rows.map((r) => r.map(cell).join(';')).join('\r\n')], { type: 'text/csv;charset=utf-8' });
+  const a = Object.assign(document.createElement('a'), { href: URL.createObjectURL(blob), download: 'ma-selection-jadara.csv' });
+  document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  toast('Fichier téléchargé');
+});
 
 /* ---------- Coups de cœur ---------- */
 async function toggleLike(id) {
@@ -203,12 +232,36 @@ document.addEventListener('keydown', (e) => {
 /* ---------- Barre flottante : compte à rebours + progression ---------- */
 {
   const [y, m, d] = data.eventDate.split('-').map(Number);
-  const days = Math.ceil((new Date(y, m - 1, d) - new Date()) / 864e5);
-  const label = days > 0 ? 'J-' + days : days === 0 ? "C'est aujourd'hui" : 'Vente terminée';
-  $('#countdown').textContent = label;
-  $$('[data-countdown]').forEach((el) => { el.textContent = label; });
+  const target = new Date(y, m - 1, d);
+  const UNITS = { d: ['jour', 'jours'], h: ['heure', 'heures'], m: ['minute', 'minutes'], s: ['seconde', 'secondes'] };
+  const tick = () => {
+    const ms = target - Date.now();
+    const days = Math.ceil(ms / 864e5);
+    const label = days > 0 ? 'J-' + days : days === 0 ? "C'est aujourd'hui" : 'Vente terminée';
+    $('#countdown').textContent = label;
+    $$('[data-countdown]').forEach((el) => {
+      if (ms <= 0) { el.className = 'cdown done'; el.textContent = label; return; }
+      const v = { d: Math.floor(ms / 864e5), h: Math.floor(ms / 36e5) % 24, m: Math.floor(ms / 6e4) % 60, s: Math.floor(ms / 1e3) % 60 };
+      for (const k in v) {
+        $('[data-u=' + k + ']', el).textContent = k === 'd' ? v[k] : String(v[k]).padStart(2, '0');
+        $('[data-l=' + k + ']', el).textContent = UNITS[k][v[k] > 1 ? 1 : 0];
+      }
+      el.setAttribute('aria-label', v.d + ' jours, ' + v.h + ' heures et ' + v.m + ' minutes avant la vente');
+    });
+  };
+  tick(); setInterval(tick, 1000);
   const upd = () => { const h = document.documentElement; $('#pct').textContent = Math.round(h.scrollTop / Math.max(1, h.scrollHeight - h.clientHeight) * 100) + '%'; };
   addEventListener('scroll', upd, { passive: true }); upd();
+}
+
+/* ---------- Liste des artistes : les premiers, puis « Voir les autres » ---------- */
+{
+  const btn = $('#artistsMore');
+  if (btn) btn.addEventListener('click', () => {
+    const open = $('#alist').classList.toggle('open');
+    btn.setAttribute('aria-expanded', String(open));
+    btn.textContent = open ? 'Réduire la liste' : 'Voir les ' + btn.dataset.n + ' autres artistes';
+  });
 }
 
 /* ---------- Apparition au défilement ---------- */

@@ -33,7 +33,8 @@ const X = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="c
 
 const title = 'Vente solidaire Jadara · Agile en Med 2026';
 const description = `Vente aux enchères solidaire au profit de Jadara. ${s.dateLabel}. 100% des enchères financent des bourses d'études.`;
-const clientData = { eventDate: s.eventDate, categories, artists, lots };
+const ARTISTS_SHOWN = 9; // artistes visibles avant « Voir les autres »
+const clientData = { eventDate: s.eventDate, dateLabel: s.dateLabel, siteUrl: origin, categories, artists, lots };
 ---
 <!doctype html>
 <html lang="fr">
@@ -136,15 +137,20 @@ const clientData = { eventDate: s.eventDate, categories, artists, lots };
 <section class="artists">
   <div class="wrap">
     <div class="sec-head reveal"><div><div class="eyebrow">Portraits</div><h2>Les artistes &amp; donateurs</h2></div></div>
-    <div class="alist">
-      {activeArtists.map((a) => (
-        <div class="arow">
-          <div class="nm">{a.name}</div><div class="rl">{a.role}</div>
-          <button class="pill light sm" data-artist={a.id}>{a.count} {a.count > 1 ? 'œuvres' : 'œuvre'}</button>
-          {a.bio && <details><summary>Lire le portrait</summary><p style="max-width:760px;padding:8px 0 4px">{a.bio}</p></details>}
+    <div class="alist" id="alist">
+      {activeArtists.map((a, i) => (
+        <div class="arow" data-extra={i >= ARTISTS_SHOWN ? '' : undefined}>
+          <div class="ahead">
+            <div><div class="nm">{a.name}</div><div class="rl">{a.role}</div></div>
+            <button class="pill light sm" data-artist={a.id} aria-label={`Voir les œuvres de ${a.name}`}>{a.count} {a.count > 1 ? 'œuvres' : 'œuvre'}</button>
+          </div>
+          {a.bio && <details><summary>Lire le portrait</summary><p>{a.bio}</p></details>}
         </div>
       ))}
     </div>
+    {activeArtists.length > ARTISTS_SHOWN && (
+      <div class="alist-more"><button class="pill light" id="artistsMore" aria-controls="alist" aria-expanded="false" data-n={activeArtists.length - ARTISTS_SHOWN}>Voir les {activeArtists.length - ARTISTS_SHOWN} autres artistes</button></div>
+    )}
   </div>
 </section>
 
@@ -219,7 +225,13 @@ const clientData = { eventDate: s.eventDate, categories, artists, lots };
       <button class="x" data-close aria-label="Fermer"><Fragment set:html={X} /></button>
       <div class="pic"><img src={popinLot.image} alt={`${popinLot.title}, ${artistName(popinLot.artist)}`} loading="lazy" /></div>
       <div class="welcome-body">
-        <div class="welcome-tags"><span class="tag gold" data-countdown>Bientôt</span><span class="tag">{s.dateLabel}</span></div>
+        <div class="welcome-tags"><span class="tag">{s.dateLabel}</span></div>
+        <div class="cdown" data-countdown role="img" aria-label="Compte à rebours avant la vente">
+          <div class="cell"><b data-u="d">--</b><span data-l="d">jours</span></div>
+          <div class="cell"><b data-u="h">--</b><span data-l="h">heures</span></div>
+          <div class="cell"><b data-u="m">--</b><span data-l="m">minutes</span></div>
+          <div class="cell"><b data-u="s">--</b><span data-l="s">secondes</span></div>
+        </div>
         <h2 id="welcomeTitle">{s.popinTitle}</h2>
         <p class="sub">{popinText}</p>
         <a class="pill dark" href="#oeuvres" data-close>Découvrir les œuvres</a>
@@ -238,7 +250,29 @@ const clientData = { eventDate: s.eventDate, categories, artists, lots };
 <aside class="drawer" id="drawer" aria-label="Ma sélection">
   <header><h2>Ma sélection</h2><button class="x" id="closeSel" aria-label="Fermer ma sélection"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></header>
   <ul id="selList"></ul>
-  <div class="foot" id="selFoot"></div>
+  <div class="foot">
+    <p id="selFoot"></p>
+    <div class="share" id="selShare" hidden>
+      <a class="pill dark" id="actMail" href="#">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7 8 6 8-6"/></svg>
+        Envoyer par e-mail
+      </a>
+      <div class="share-row">
+        <a class="pill light sm" id="actWa" href="#" target="_blank" rel="noopener">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21l1.7-5A8.5 8.5 0 1 1 8 19.3L3 21Z"/></svg>
+          WhatsApp
+        </a>
+        <button class="pill light sm" id="actCopy" type="button">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2.5"/><path d="M5 15V6.5A2.5 2.5 0 0 1 7.5 4H15"/></svg>
+          Copier
+        </button>
+        <button class="pill light sm" id="actCsv" type="button" aria-label="Exporter ma sélection en fichier CSV (Excel)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14"/></svg>
+          Exporter
+        </button>
+      </div>
+    </div>
+  </div>
 </aside>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
