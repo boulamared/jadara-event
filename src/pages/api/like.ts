@@ -12,8 +12,22 @@ const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 export const POST: APIRoute = async ({ request, clientAddress, url }) => {
   // Requêtes venant d'un autre site : refusées.
+  // Derrière Caddy, url.host peut ne pas être le domaine public : on accepte aussi l'en-tête Host,
+  // X-Forwarded-Host et le domaine de SITE_URL.
   const origin = request.headers.get('origin');
-  if (origin && new URL(origin).host !== url.host) return json(403, { ok: false, error: 'origin' });
+  if (origin) {
+    let originHost = '';
+    try { originHost = new URL(origin).host; } catch { /* origine invalide */ }
+    const siteHost = (() => { try { return new URL(process.env.SITE_URL || '').host; } catch { return ''; } })();
+    const allowed = [
+      url.host, request.headers.get('host'), siteHost,
+      request.headers.get('x-forwarded-host')?.split(',')[0]?.trim(),
+    ].filter(Boolean);
+    if (!originHost || !allowed.includes(originHost)) {
+      console.warn('[like] origine refusée', { origin, allowed });
+      return json(403, { ok: false, error: 'origin' });
+    }
+  }
 
   // Derrière Caddy, l'adresse du visiteur est dans X-Forwarded-For (Caddy l'écrase pour les clients non fiables).
   let ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
