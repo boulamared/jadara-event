@@ -2,6 +2,7 @@
 import '@fontsource-variable/inter-tight';
 import '../styles/site.css';
 import { getContent } from '../lib/content';
+import { partners } from '../data/partners';
 
 const { settings: s, categories, artists, lots } = await getContent();
 
@@ -34,7 +35,7 @@ const X = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="c
 const title = 'Vente solidaire Jadara · Agile en Med 2026';
 const description = `Vente aux enchères solidaire au profit de Jadara. ${s.dateLabel}. 100% des enchères financent des bourses d'études.`;
 const ARTISTS_SHOWN = 9; // artistes visibles avant « Voir les autres »
-const clientData = { eventDate: s.eventDate, dateLabel: s.dateLabel, siteUrl: origin, categories, artists, lots };
+const clientData = { eventDate: s.eventDate, dateLabel: s.dateLabel, siteUrl: origin, categories, artists, lots, partners };
 ---
 <!doctype html>
 <html lang="fr">
@@ -51,11 +52,11 @@ const clientData = { eventDate: s.eventDate, dateLabel: s.dateLabel, siteUrl: or
 <body>
 <a class="skip" href="#oeuvres">Aller aux œuvres</a>
 <header class="top"><div class="wrap">
-  <a class="brand" href="#top" aria-label="Vente solidaire Jadara, Agile en Med et Maltem Africa : haut de page">
-    <img src="/img/logo-jadara.png" alt="Jadara" width="300" height="255" style="--h:46px">
-    <img src="/img/logo-agile.png" alt="Agile en Med" width="640" height="234" style="--h:40px">
-    <img src="/img/logo-maltem.png" alt="Maltem Africa" width="640" height="189" style="--h:30px">
-  </a>
+  <div class="brand" role="group" aria-label="Jadara, Agile en Med et Maltem Africa : en savoir plus">
+    <button data-partner="jadara" aria-label="Jadara : en savoir plus"><img src="/img/logo-jadara.png" alt="" width="300" height="255" style="--h:46px"></button>
+    <button data-partner="agile" aria-label="Agile en Med : en savoir plus"><img src="/img/logo-agile.png" alt="" width="640" height="234" style="--h:40px"></button>
+    <button data-partner="maltem" aria-label="Maltem Africa : en savoir plus"><img src="/img/logo-maltem.png" alt="" width="640" height="189" style="--h:30px"></button>
+  </div>
   <a class="pill light sm" href={donate}>Faire un don</a>
 </div></header>
 
@@ -171,9 +172,13 @@ const clientData = { eventDate: s.eventDate, dateLabel: s.dateLabel, siteUrl: or
     <h2>Agile en Med et Maltem Africa s'unissent à Jadara.</h2>
     <p class="lead" style="margin-top:20px">Trois marques, trois rôles, une seule conviction : donner à chaque jeune les moyens de réussir.</p>
     <div class="logos">
-      <div class="logo"><img src="img/logo-jadara.png" alt="Jadara"><span>Porte-voix et bénéficiaire</span></div>
-      <div class="logo"><img src="img/logo-agile.png" alt="Agile en Med"><span>Amplificateur événementiel</span></div>
-      <div class="logo"><img src="img/logo-maltem.png" alt="Maltem Africa"><span>Caution corporate &amp; RSE</span></div>
+      {partners.map((p) => (
+        <button class="logo" data-partner={p.id} aria-label={`${p.name} : en savoir plus`}>
+          <img src={p.logo} alt="">
+          <span>{p.role}</span>
+          <em>En savoir plus <i aria-hidden="true">→</i></em>
+        </button>
+      ))}
     </div>
   </div></div>
 </section>
@@ -183,8 +188,7 @@ const clientData = { eventDate: s.eventDate, dateLabel: s.dateLabel, siteUrl: or
 
 <!-- Dock flottant -->
 <div class="dock" role="toolbar" aria-label="Barre d'accès rapide">
-  <span class="cd" id="countdown">J-—</span>
-  <span class="pct" id="pct" aria-hidden="true">0%</span>
+  <span class="cd" id="countdown" role="timer" aria-label="Temps restant avant la vente">—</span>
   <button class="sel" id="openSel" aria-controls="drawer" aria-expanded="false">Ma sélection <b id="selCount">0</b></button>
 </div>
 
@@ -241,6 +245,11 @@ const clientData = { eventDate: s.eventDate, dateLabel: s.dateLabel, siteUrl: or
   </div>
 )}
 
+<!-- Fiche partenaire -->
+<div class="scrim" id="partnerScrim" aria-hidden="true">
+  <div class="modal partner" role="dialog" aria-modal="true" aria-labelledby="partnerTitle" id="partnerModal"></div>
+</div>
+
 <!-- Fiche œuvre -->
 <div class="scrim" id="lotScrim" aria-hidden="true">
   <div class="modal wide" role="dialog" aria-modal="true" aria-labelledby="lotTitle" id="lotModal"></div>
@@ -258,17 +267,13 @@ const clientData = { eventDate: s.eventDate, dateLabel: s.dateLabel, siteUrl: or
         Envoyer par e-mail
       </a>
       <div class="share-row">
-        <a class="pill light sm" id="actWa" href="#" target="_blank" rel="noopener">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21l1.7-5A8.5 8.5 0 1 1 8 19.3L3 21Z"/></svg>
-          WhatsApp
-        </a>
+        <button class="pill light sm" id="actShare" type="button" hidden>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V4m0 0L8 8m4-4 4 4M5 13v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/></svg>
+          Partager
+        </button>
         <button class="pill light sm" id="actCopy" type="button">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2.5"/><path d="M5 15V6.5A2.5 2.5 0 0 1 7.5 4H15"/></svg>
           Copier
-        </button>
-        <button class="pill light sm" id="actCsv" type="button" aria-label="Exporter ma sélection en fichier CSV (Excel)">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14"/></svg>
-          Exporter
         </button>
       </div>
     </div>
