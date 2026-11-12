@@ -83,7 +83,6 @@ function syncLikes() {
     const text = selectionText(items);
     const subject = 'Ma sélection · Vente solidaire Jadara';
     $('#actMail').href = 'mailto:' + (contact ? encodeURIComponent(contact.email) : '') + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(text);
-    $('#actWa').href = 'https://wa.me/?text=' + encodeURIComponent(text);
   }
   if (filter.fav) applyFilter();
   renderLotModal();
@@ -101,16 +100,37 @@ $('#actCopy').addEventListener('click', async () => {
   try { await navigator.clipboard.writeText(selectionText(selectionItems())); toast('Liste copiée'); }
   catch { toast('Copie impossible sur ce navigateur.', true); }
 });
-$('#actCsv').addEventListener('click', () => {
-  const cell = (v) => '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"';
-  const rows = [['Lot', 'Titre', 'Artiste', 'Catégorie', 'Technique', 'Prix']]
-    .concat(selectionItems().map((l) => [l.lot, l.title, artistName(l), CATS.get(l.category) || '', l.tech, l.price || '']));
-  // BOM + point-virgule : Excel en français ouvre le fichier directement.
-  const blob = new Blob(['﻿' + rows.map((r) => r.map(cell).join(';')).join('\r\n')], { type: 'text/csv;charset=utf-8' });
-  const a = Object.assign(document.createElement('a'), { href: URL.createObjectURL(blob), download: 'ma-selection-jadara.csv' });
-  document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
-  toast('Fichier téléchargé');
-});
+// Partage natif : l'appareil propose ses propres applications (WhatsApp, Messages, Mail, AirDrop…).
+if (navigator.share) {
+  const btn = $('#actShare'); btn.hidden = false;
+  btn.addEventListener('click', async () => {
+    try { await navigator.share({ title: 'Ma sélection · Vente solidaire Jadara', text: selectionText(selectionItems()), url: data.siteUrl }); }
+    catch (err) { if (err && err.name !== 'AbortError') toast('Partage impossible sur cet appareil.', true); }
+  });
+}
+
+/* ---------- Fiches partenaires ---------- */
+const PARTNERS = new Map((data.partners || []).map((p) => [p.id, p]));
+const ICON = {
+  site: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18"/></svg>',
+  in: '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9.75h4V21H3V9.75Zm6.5 0h3.8v1.6h.05c.55-1 1.9-2 3.9-2 4.1 0 4.75 2.7 4.75 6.2V21h-4v-4.7c0-1.2 0-2.7-1.7-2.7s-1.95 1.3-1.95 2.6V21h-4V9.75Z"/></svg>',
+  mail: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7 8 6 8-6"/></svg>',
+};
+function openPartner(id) {
+  const p = PARTNERS.get(id); if (!p) return;
+  const safe = (u) => (/^https?:\/\//.test(u) ? u : '');
+  const contact = /^[^\s@]+@[^\s@]+$/.test(p.contact) ? 'mailto:' + p.contact : safe(p.contact);
+  const links = [[safe(p.website), ICON.site, 'Site web'], [safe(p.linkedin), ICON.in, 'LinkedIn'], [contact, ICON.mail, 'Contact']]
+    .filter((l) => l[0])
+    .map((l) => '<a class="pill light sm" href="' + esc(l[0]) + '"' + (l[0].startsWith('mailto:') ? '' : ' target="_blank" rel="noopener noreferrer"') + '>' + l[1] + l[2] + '</a>').join('');
+  $('#partnerModal').innerHTML = '<button class="x" data-close aria-label="Fermer">' + X + '</button>' +
+    '<div class="plogo"><img src="' + esc(p.logo) + '" alt=""></div>' +
+    '<div class="eyebrow" style="margin-bottom:8px">' + esc(p.role) + '</div>' +
+    '<h2 id="partnerTitle">' + esc(p.name) + '</h2>' +
+    '<p class="sub">' + esc(p.about) + '</p>' +
+    (links ? '<div class="plinks">' + links + '</div>' : '');
+  openScrim($('#partnerScrim'));
+}
 
 /* ---------- Coups de cœur ---------- */
 async function toggleLike(id) {
@@ -203,8 +223,9 @@ $('#closeSel').addEventListener('click', () => { setDrawer(false); $('#openSel')
 
 /* ---------- Événements ---------- */
 document.addEventListener('click', (e) => {
-  const t = e.target.closest('[data-like],[data-open],[data-close],[data-cat],[data-fav],[data-clear],[data-artist]');
+  const t = e.target.closest('[data-like],[data-open],[data-close],[data-cat],[data-fav],[data-clear],[data-artist],[data-partner]');
   if (!t) return;
+  if (t.dataset.partner) return void openPartner(t.dataset.partner);
   if (t.dataset.like) return void toggleLike(t.dataset.like);
   if (t.dataset.open) { openLotId = t.dataset.open; renderLotModal(); return openScrim($('#lotScrim')); }
   if ('close' in t.dataset) return closeScrims();
@@ -229,29 +250,37 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-/* ---------- Barre flottante : compte à rebours + progression ---------- */
+/* ---------- Barre flottante : compte à rebours exact ---------- */
 {
   const [y, m, d] = data.eventDate.split('-').map(Number);
   const target = new Date(y, m - 1, d);
   const UNITS = { d: ['jour', 'jours'], h: ['heure', 'heures'], m: ['minute', 'minutes'], s: ['seconde', 'secondes'] };
+  const pad = (n) => String(n).padStart(2, '0');
+  // Mois calendaires entiers restants, puis jours / heures / minutes / secondes.
+  const split = (from) => {
+    let months = (target.getFullYear() - from.getFullYear()) * 12 + target.getMonth() - from.getMonth();
+    let anchor = new Date(from); anchor.setMonth(from.getMonth() + months);
+    if (anchor > target) { months--; anchor = new Date(from); anchor.setMonth(from.getMonth() + months); }
+    const ms = target - anchor;
+    return { mo: months, d: Math.floor(ms / 864e5), h: Math.floor(ms / 36e5) % 24, m: Math.floor(ms / 6e4) % 60, s: Math.floor(ms / 1e3) % 60 };
+  };
   const tick = () => {
-    const ms = target - Date.now();
-    const days = Math.ceil(ms / 864e5);
-    const label = days > 0 ? 'J-' + days : days === 0 ? "C'est aujourd'hui" : 'Vente terminée';
-    $('#countdown').textContent = label;
+    const now = new Date(), ms = target - now;
+    const done = ms <= 0 ? (now - target < 864e5 ? "C'est aujourd'hui" : 'Vente terminée') : '';
+    const t = done ? null : split(now);
+    $('#countdown').textContent = done || (t.mo ? t.mo + ' mois ' : '') + t.d + ' j ' + pad(t.h) + ' h ' + pad(t.m) + ' min ' + pad(t.s) + ' s';
+    $('#countdown').setAttribute('aria-label', done || 'Temps restant avant la vente : ' + (t.mo ? t.mo + ' mois, ' : '') + t.d + ' jours, ' + t.h + ' heures et ' + t.m + ' minutes');
     $$('[data-countdown]').forEach((el) => {
-      if (ms <= 0) { el.className = 'cdown done'; el.textContent = label; return; }
-      const v = { d: Math.floor(ms / 864e5), h: Math.floor(ms / 36e5) % 24, m: Math.floor(ms / 6e4) % 60, s: Math.floor(ms / 1e3) % 60 };
+      if (done) { el.className = 'cdown done'; el.textContent = done; return; }
+      const v = { d: Math.floor(ms / 864e5), h: t.h, m: t.m, s: t.s };
       for (const k in v) {
-        $('[data-u=' + k + ']', el).textContent = k === 'd' ? v[k] : String(v[k]).padStart(2, '0');
+        $('[data-u=' + k + ']', el).textContent = k === 'd' ? v[k] : pad(v[k]);
         $('[data-l=' + k + ']', el).textContent = UNITS[k][v[k] > 1 ? 1 : 0];
       }
       el.setAttribute('aria-label', v.d + ' jours, ' + v.h + ' heures et ' + v.m + ' minutes avant la vente');
     });
   };
   tick(); setInterval(tick, 1000);
-  const upd = () => { const h = document.documentElement; $('#pct').textContent = Math.round(h.scrollTop / Math.max(1, h.scrollHeight - h.clientHeight) * 100) + '%'; };
-  addEventListener('scroll', upd, { passive: true }); upd();
 }
 
 /* ---------- Liste des artistes : les premiers, puis « Voir les autres » ---------- */
