@@ -111,20 +111,9 @@ header.top .wrap{display:flex;align-items:center;justify-content:space-between;g
 .card:hover .more span{transform:translateX(4px)}
 .empty{grid-column:1/-1;text-align:center;padding:64px 16px;color:var(--muted);background:var(--surface);border-radius:var(--r-card)}
 
-/* Artists */
-.artists{background:var(--surface)}
-/* Cartes compactes : 3 colonnes, les 9 premiers visibles, le portrait s'ouvre dans sa carte. */
-.alist{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;align-items:start}
-.alist:not(.open) [data-extra]{display:none}
-.arow{background:var(--bg);border-radius:20px;padding:18px 18px 10px 22px}
-.ahead{display:flex;align-items:center;justify-content:space-between;gap:12px}
-.arow .nm{font-size:clamp(20px,1.9vw,24px);font-weight:500;letter-spacing:-.02em;line-height:1.15}
-.arow .rl{color:var(--muted);font-size:15px;margin-top:2px}
-.arow .ahead .pill{flex:0 0 auto}
-.arow details{font-size:16px;color:var(--muted);margin-top:6px}
-.arow details p{padding:6px 0 10px}
-.arow summary{cursor:pointer;min-height:36px;display:flex;align-items:center;font-weight:500;color:var(--ink);font-size:15px;width:max-content}
-.alist-more{display:flex;justify-content:center;margin-top:28px}
+.artist-box{background:var(--bg);border-radius:18px;padding:16px 18px;margin-top:18px}
+.artist-box p{font-size:16px;color:var(--muted)}
+.artist-box .pill{margin-top:14px;width:auto}
 
 /* Steps */
 .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
@@ -246,7 +235,6 @@ footer{padding:48px 0 140px;color:var(--muted);font-size:15px;text-align:center}
   .hero-photo{top:auto;bottom:0;right:auto;left:50%;transform:translateX(-50%);height:auto;width:min(100%,560px);-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 14%),linear-gradient(to right,transparent 0,#000 14%,#000 86%,transparent 100%);mask-image:linear-gradient(to bottom,transparent 0,#000 14%),linear-gradient(to right,transparent 0,#000 14%,#000 86%,transparent 100%);-webkit-mask-composite:source-in;mask-composite:intersect}
   .hero{background:linear-gradient(180deg,#03062A 0%,#171C2E 45%,#1F2336 70%,#020203 100%)}
   .band-grid,.steps,.logos,.modal.wide{grid-template-columns:1fr}
-  .alist{grid-template-columns:repeat(2,1fr)}
   .cdown{gap:6px;margin-bottom:16px}.cdown .cell{padding:10px 2px 9px;border-radius:14px}.cdown b{font-size:30px}.cdown span{font-size:10.5px;letter-spacing:.04em}
   .ally{border-radius:28px;padding:48px 24px}
   .row2{grid-template-columns:1fr}
@@ -268,8 +256,6 @@ footer{padding:48px 0 140px;color:var(--muted);font-size:15px;text-align:center}
   .brand{padding:6px 14px}
   header.top .pill{padding:0 14px}
   .wrap{padding:0 16px}
-  .alist{grid-template-columns:1fr;gap:8px}
-  .arow{padding:14px 14px 6px 18px}
   .grid{grid-template-columns:repeat(2,1fr);gap:10px}
   .card{padding:6px;border-radius:18px}.card .media{border-radius:13px}
   .card .media img{inset:14px;width:calc(100% - 28px);height:calc(100% - 28px)}

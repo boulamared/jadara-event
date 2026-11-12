@@ -34,7 +34,6 @@ const X = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="c
 
 const title = 'Vente solidaire Jadara · Agile en Med 2026';
 const description = `Vente aux enchères solidaire au profit de Jadara. ${s.dateLabel}. 100% des enchères financent des bourses d'études.`;
-const ARTISTS_SHOWN = 9; // artistes visibles avant « Voir les autres »
 const clientData = { eventDate: s.eventDate, dateLabel: s.dateLabel, siteUrl: origin, categories, artists, lots, partners };
 ---
 <!doctype html>
@@ -132,26 +131,6 @@ const clientData = { eventDate: s.eventDate, dateLabel: s.dateLabel, siteUrl: or
       ))}
       <div class="empty" id="empty" hidden></div>
     </div>
-  </div>
-</section>
-
-<section class="artists">
-  <div class="wrap">
-    <div class="sec-head reveal"><div><div class="eyebrow">Portraits</div><h2>Les artistes &amp; donateurs</h2></div></div>
-    <div class="alist" id="alist">
-      {activeArtists.map((a, i) => (
-        <div class="arow" data-extra={i >= ARTISTS_SHOWN ? '' : undefined}>
-          <div class="ahead">
-            <div><div class="nm">{a.name}</div><div class="rl">{a.role}</div></div>
-            <button class="pill light sm" data-artist={a.id} aria-label={`Voir les œuvres de ${a.name}`}>{a.count} {a.count > 1 ? 'œuvres' : 'œuvre'}</button>
-          </div>
-          {a.bio && <details><summary>Lire le portrait</summary><p>{a.bio}</p></details>}
-        </div>
-      ))}
-    </div>
-    {activeArtists.length > ARTISTS_SHOWN && (
-      <div class="alist-more"><button class="pill light" id="artistsMore" aria-controls="alist" aria-expanded="false" data-n={activeArtists.length - ARTISTS_SHOWN}>Voir les {activeArtists.length - ARTISTS_SHOWN} autres artistes</button></div>
-    )}
   </div>
 </section>
 

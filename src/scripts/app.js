@@ -171,6 +171,7 @@ function openLead() {
 function renderLotModal() {
   if (!openLotId) return;
   const l = LOTS.get(openLotId), a = ARTISTS.get(l.artist) || {}, on = liked.has(l.id);
+  const n = data.lots.filter((x) => x.artist === l.artist).length;
   const hadFocus = $('#lotModal').contains(document.activeElement);
   $('#lotModal').innerHTML = '<button class="x" data-close aria-label="Fermer">' + X + '</button>' +
     '<div class="pic"><img src="' + esc(l.image) + '" alt="' + esc(l.title + ', ' + (a.name || '')) + '"></div>' +
@@ -178,7 +179,8 @@ function renderLotModal() {
     '<h2 id="lotTitle"' + (l.rtl ? ' dir="rtl" lang="ar"' : '') + ' style="margin-top:6px">' + esc(l.title) + '</h2>' +
     '<p style="font-size:19px;font-weight:500">' + esc(a.name) + (a.role ? ' <span style="color:var(--muted);font-weight:400">· ' + esc(a.role) + '</span>' : '') + '</p>' +
     '<p class="sub" style="margin-top:6px">' + esc(l.tech) + (l.price ? '<br>' + esc(l.price) : '') + '</p>' +
-    '<p style="font-size:16px;color:var(--muted)">' + esc(a.bio) + '</p>' +
+    (a.bio ? '<div class="artist-box"><div class="eyebrow" style="margin-bottom:8px">À propos de l\'artiste</div><p>' + esc(a.bio) + '</p>' +
+      (n > 1 ? '<button class="pill light sm" data-artist="' + esc(a.id) + '">Voir les ' + n + ' œuvres de ' + esc(a.name) + '</button>' : '') + '</div>' : '') +
     '<button class="pill ' + (on ? 'light' : 'dark') + '" data-like="' + esc(l.id) + '" aria-pressed="' + on + '" style="margin-top:24px">' + HEART + (on ? 'Dans ma sélection' : 'Coup de cœur') + '</button></div>';
   if (hadFocus) $('#lotModal [data-like]').focus();
 }
@@ -232,7 +234,7 @@ document.addEventListener('click', (e) => {
   if (t.dataset.cat) filter = { cat: t.dataset.cat, fav: false, artist: null };
   else if ('fav' in t.dataset) filter = { cat: 'all', fav: !filter.fav, artist: null };
   else if ('clear' in t.dataset) filter = { cat: 'all', fav: false, artist: null };
-  else if (t.dataset.artist) { filter = { cat: 'all', fav: false, artist: t.dataset.artist }; $('#oeuvres').scrollIntoView(); }
+  else if (t.dataset.artist) { filter = { cat: 'all', fav: false, artist: t.dataset.artist }; closeScrims(); $('#oeuvres').scrollIntoView(); }
   applyFilter();
 });
 $$('.scrim').forEach((s) => s.addEventListener('mousedown', (e) => { if (e.target === s) closeScrims(); }));
@@ -281,16 +283,6 @@ document.addEventListener('keydown', (e) => {
     });
   };
   tick(); setInterval(tick, 1000);
-}
-
-/* ---------- Liste des artistes : les premiers, puis « Voir les autres » ---------- */
-{
-  const btn = $('#artistsMore');
-  if (btn) btn.addEventListener('click', () => {
-    const open = $('#alist').classList.toggle('open');
-    btn.setAttribute('aria-expanded', String(open));
-    btn.textContent = open ? 'Réduire la liste' : 'Voir les ' + btn.dataset.n + ' autres artistes';
-  });
 }
 
 /* ---------- Apparition au défilement ---------- */
