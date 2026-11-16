@@ -28,7 +28,10 @@ async function fromSanity(projectId: string): Promise<Content> {
     dataset: env('SANITY_DATASET') || 'production',
     apiVersion: '2025-02-19',
     useCdn: false,
-    perspective: 'published',
+    // Avec le jeton, on lit les brouillons par-dessus le publié : une modification faite dans le Studio
+    // (case « En ligne », prix…) apparaît tout de suite, sans devoir cliquer sur « Publish ».
+    token: env('SANITY_WRITE_TOKEN') || undefined,
+    perspective: env('SANITY_WRITE_TOKEN') ? 'drafts' : 'published',
   });
   const r = await client.fetch(QUERY);
   return {
@@ -58,7 +61,7 @@ let cache: { at: number; data: Content } | null = null;
 
 /** Contenu du site : Sanity si SANITY_PROJECT_ID est défini, sinon le fichier seed local. */
 export async function getContent(): Promise<Content> {
-  if (cache && Date.now() - cache.at < 60_000) return cache.data;
+  if (cache && Date.now() - cache.at < 15_000) return cache.data;
   const projectId = env('SANITY_PROJECT_ID');
   const data = projectId ? await fromSanity(projectId) : (seed as Content);
   cache = { at: Date.now(), data };

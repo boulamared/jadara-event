@@ -6,8 +6,8 @@ import { partners } from '../data/partners';
 
 const { settings: s, categories, artists, lots } = await getContent();
 
-// Contenu mis en cache 60 s côté serveur ; le navigateur et Caddy peuvent garder la page 30 s.
-Astro.response.headers.set('Cache-Control', 'public, max-age=30, s-maxage=60');
+// Contenu mis en cache 15 s côté serveur ; le navigateur et Caddy peuvent garder la page 10 s.
+Astro.response.headers.set('Cache-Control', 'public, max-age=10, s-maxage=15');
 const origin = (process.env.SITE_URL || Astro.url.origin).replace(/\/$/, '');
 const catLabel = (id: string) => categories.find((c) => c.id === id)?.label ?? '';
 const artistName = (id: string) => artists.find((a) => a.id === id)?.name ?? '';
