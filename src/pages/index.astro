@@ -16,7 +16,9 @@ const activeArtists = artists.map((a) => ({ ...a, count: lots.filter((l) => l.ar
 const donate = s.donationUrl || '#oeuvres';
 
 // Si la photo du hero est celle d'un lot, on crédite l'artiste et on ouvre sa fiche.
-const heroLot = lots.find((l) => l.image === s.heroImage);
+// Le fichier du hero porte le nom de l'artiste (ex. /img/guyard.webp) ; avec Sanity, les URL des lots diffèrent.
+const heroFile = s.heroImage.split('?')[0].split('/').pop()?.replace(/\.\w+$/, '') ?? '';
+const heroLot = lots.find((l) => l.image === s.heroImage) ?? lots.find((l) => l.artist === heroFile);
 
 // Éventail du hero : 7 œuvres réparties dans le catalogue (sans celle de la photo).
 const pool = lots.filter((l) => l !== heroLot);

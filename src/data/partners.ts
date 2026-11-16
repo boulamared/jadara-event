@@ -39,7 +39,7 @@ export const partners: Partner[] = [
     logo: '/img/logo-maltem.png',
     about: "Cabinet de conseil qui accompagne les entreprises dans leur transformation digitale, en mêlant stratégie, technologie et design : agilité, data, UX, modernisation technologique et cybersécurité. Plus de 50 clients, et deux marques : Maltem Academy et Valkima. Maltem Africa soutient cette vente dans le cadre de son engagement sociétal.",
     website: 'https://africa.maltem.com/',
-    linkedin: '',
+    linkedin: 'https://www.linkedin.com/company/maltem-africa/',
     contact: '',
   },
 ];
