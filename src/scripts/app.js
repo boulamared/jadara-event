@@ -219,17 +219,12 @@ $('#closeSel').addEventListener('click', () => { setDrawer(false); $('#openSel')
 
 /* ---------- Événements ---------- */
 document.addEventListener('click', (e) => {
-  const t = e.target.closest('[data-like],[data-open],[data-close],[data-cat],[data-fav],[data-clear],[data-artist],[data-partner]');
+  const t = e.target.closest('[data-like],[data-open],[data-close],[data-partner]');
   if (!t) return;
   if (t.dataset.partner) return void openPartner(t.dataset.partner);
   if (t.dataset.like) return void toggleLike(t.dataset.like);
   if (t.dataset.open) { openLotId = t.dataset.open; renderLotModal(); return openScrim($('#lotScrim')); }
   if ('close' in t.dataset) return closeScrims();
-  if (t.dataset.cat) filter = { cat: t.dataset.cat, fav: false, artist: null };
-  else if ('fav' in t.dataset) filter = { cat: 'all', fav: !filter.fav, artist: null };
-  else if ('clear' in t.dataset) filter = { cat: 'all', fav: false, artist: null };
-  else if (t.dataset.artist) { filter = { cat: 'all', fav: false, artist: t.dataset.artist }; closeScrims(); $('#oeuvres').scrollIntoView(); }
-  applyFilter();
 });
 $$('.scrim').forEach((s) => s.addEventListener('mousedown', (e) => { if (e.target === s) closeScrims(); }));
 document.addEventListener('keydown', (e) => {
