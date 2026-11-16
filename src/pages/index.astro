@@ -72,11 +72,6 @@ const clientData = { eventDate: s.eventDate, dateLabel: s.dateLabel, siteUrl: or
       <a class="pill light" href="#oeuvres">Découvrir les œuvres</a>
       <a class="pill ghost" href="#pratique">Comment enchérir</a>
     </div>
-    <div class="stats">
-      <div><b>{lots.length}</b><span>lots à enchérir</span></div>
-      <div><b>{activeArtists.length}</b><span>artistes &amp; donateurs</span></div>
-      <div><b>100%</b><span>reversé à Jadara</span></div>
-    </div>
   </div>
   <img class="hero-photo" src={s.heroImage} alt="" fetchpriority="high" />
   <div class="fan">
@@ -90,11 +85,10 @@ const clientData = { eventDate: s.eventDate, dateLabel: s.dateLabel, siteUrl: or
 <section class="band">
   <div class="wrap band-grid">
     <div class="reveal">
-      <div class="eyebrow">Jadara</div>
       <h2>Parce que le mérite ne devrait jamais dépendre des moyens.</h2>
-      <p>Association marocaine reconnue d'utilité publique, active depuis 2002, Jadara donne aux jeunes Marocains issus de milieux défavorisés les moyens de poursuivre leurs études, via des bourses et un accompagnement vers l'excellence académique.</p>
+      <p class="lead">Une vente aux enchères solidaire portée par Maltem Africa, Agile en Med et Jadara.</p>
+      <p>Des artistes ont offert leurs œuvres pour soutenir des jeunes Marocains talentueux issus de milieux modestes. Chaque enchère finance leurs études : 100 % des montants sont reversés à Jadara.</p>
     </div>
-    <div class="bigstat reveal"><b>+1,5M</b><span>jeunes de 15 à 24 ans sans emploi, études ni formation au Maroc</span></div>
   </div>
 </section>
 
@@ -102,15 +96,6 @@ const clientData = { eventDate: s.eventDate, dateLabel: s.dateLabel, siteUrl: or
   <div class="wrap">
     <div class="sec-head reveal">
       <div><div class="eyebrow">À enchérir</div><h2>Les œuvres</h2></div>
-      <p class="lead">Un coup de cœur présélectionne l'œuvre sans engagement. Il aide Jadara à mesurer l'intérêt avant le jour J.</p>
-    </div>
-    <div class="filters" id="filters" role="group" aria-label="Filtrer les œuvres">
-      <button class="chip" data-cat="all" aria-pressed="true">Tout <span class="n">{lots.length}</span></button>
-      {cats.map((c) => (
-        <button class="chip" data-cat={c.id} aria-pressed="false">{c.label} <span class="n">{c.count}</span></button>
-      ))}
-      <button class="chip" data-fav aria-pressed="false"><Fragment set:html={HEART} /> Mes coups de cœur <span class="n" id="favCount">0</span></button>
-      <button class="chip" data-clear aria-pressed="true" id="artistChip" hidden><span></span> <Fragment set:html={X} /></button>
     </div>
     <div class="grid" id="grid">
       {lots.map((l) => (
@@ -145,22 +130,6 @@ const clientData = { eventDate: s.eventDate, dateLabel: s.dateLabel, siteUrl: or
   </div>
 </section>
 
-<section style="padding-top:0">
-  <div class="wrap"><div class="ally reveal">
-    <div class="eyebrow" style="color:rgba(255,255,255,.72)">Une alliance</div>
-    <h2>Agile en Med et Maltem Africa s'unissent à Jadara.</h2>
-    <p class="lead" style="margin-top:20px">Trois marques, trois rôles, une seule conviction : donner à chaque jeune les moyens de réussir.</p>
-    <div class="logos">
-      {partners.map((p) => (
-        <button class="logo" data-partner={p.id} aria-label={`${p.name} : en savoir plus`}>
-          <img src={p.logo} alt="">
-          <span>{p.role}</span>
-          <em>En savoir plus <i aria-hidden="true">→</i></em>
-        </button>
-      ))}
-    </div>
-  </div></div>
-</section>
 </main>
 
 <footer><div class="wrap">Vente solidaire au profit de Jadara · Agile en Med 2026 · Campus Mundiapolis</div></footer>

@@ -57,11 +57,6 @@ function applyFilter() {
   const empty = $('#empty');
   empty.hidden = shown > 0;
   empty.textContent = filter.fav ? "Aucun coup de cœur pour l'instant. Touchez le cœur d'une œuvre pour la présélectionner." : 'Aucune œuvre dans cette catégorie.';
-  $$('#filters [data-cat]').forEach((b) => b.setAttribute('aria-pressed', String(!filter.fav && !filter.artist && b.dataset.cat === filter.cat)));
-  $('#filters [data-fav]').setAttribute('aria-pressed', String(filter.fav));
-  const chip = $('#artistChip');
-  chip.hidden = !filter.artist;
-  if (filter.artist) $('span', chip).textContent = ARTISTS.get(filter.artist).name;
 }
 function syncLikes() {
   $$('#grid [data-like]').forEach((b) => {
@@ -70,7 +65,6 @@ function syncLikes() {
     b.setAttribute('aria-label', (on ? 'Retirer de' : 'Ajouter à') + ' mes coups de cœur : ' + b.dataset.title);
     $('span', b).textContent = on ? 'Dans ma sélection' : 'Coup de cœur';
   });
-  $('#favCount').textContent = liked.size;
   const count = $('#selCount');
   if (count.textContent !== String(liked.size)) { count.textContent = liked.size; count.classList.remove('bump'); void count.offsetWidth; count.classList.add('bump'); }
   const items = [...liked].map((id) => LOTS.get(id));
@@ -180,7 +174,7 @@ function renderLotModal() {
     '<p style="font-size:19px;font-weight:500">' + esc(a.name) + (a.role ? ' <span style="color:var(--muted);font-weight:400">· ' + esc(a.role) + '</span>' : '') + '</p>' +
     '<p class="sub" style="margin-top:6px">' + esc(l.tech) + (l.price ? '<br>' + esc(l.price) : '') + '</p>' +
     (a.bio ? '<div class="artist-box"><div class="eyebrow" style="margin-bottom:8px">À propos de l\'artiste</div><p>' + esc(a.bio) + '</p>' +
-      (n > 1 ? '<button class="pill light sm" data-artist="' + esc(a.id) + '">Voir les ' + n + ' œuvres de ' + esc(a.name) + '</button>' : '') + '</div>' : '') +
+      '</div>' : '') +
     '<button class="pill ' + (on ? 'light' : 'dark') + '" data-like="' + esc(l.id) + '" aria-pressed="' + on + '" style="margin-top:24px">' + HEART + (on ? 'Dans ma sélection' : 'Coup de cœur') + '</button></div>';
   if (hadFocus) $('#lotModal [data-like]').focus();
 }
