@@ -49,7 +49,7 @@ header.top .wrap{display:flex;align-items:center;justify-content:space-between;g
   -webkit-mask-image:linear-gradient(to right,transparent 0,#000 30%,#000 80%,transparent 100%);mask-image:linear-gradient(to right,transparent 0,#000 30%,#000 80%,transparent 100%)}
 .badge{display:inline-flex;align-items:center;gap:10px;background:var(--surface);color:var(--ink);border-radius:var(--r-pill);padding:10px 18px;font-size:15px;font-weight:500;box-shadow:0 1px 2px rgba(0,0,0,.06),0 8px 24px rgba(0,0,0,.05);margin-bottom:20px}
 .badge svg{color:var(--accent)}
-.hero h1{max-width:680px;margin:0 0 18px}
+.hero h1{max-width:680px;margin:0 0 32px}
 .hero .lead{margin:0 0 26px;max-width:540px;color:rgba(255,255,255,.82)}
 .cta{display:flex;gap:12px;flex-wrap:wrap}
 .pill.ghost{color:#fff;box-shadow:0 0 0 1.5px rgba(255,255,255,.55) inset}
