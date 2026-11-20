@@ -56,7 +56,7 @@ const lot = defineType({
     defineField({ name: 'category', title: 'Catégorie', type: 'reference', to: [{ type: 'category' }], validation: (r) => r.required() }),
     defineField({ name: 'image', title: 'Photo', type: 'image', options: { hotspot: true }, validation: (r) => r.required() }),
     defineField({ name: 'tech', title: 'Technique et dimensions', type: 'string' }),
-    defineField({ name: 'price', title: 'Prix de départ (affiché tel quel)', type: 'string', description: 'Ex. Prix de départ : 4 590 DH' }),
+    defineField({ name: 'price', title: 'Prix (affiché tel quel)', type: 'string', description: 'Ex. Prix : 4 590 DH' }),
     defineField({ name: 'published', title: 'En ligne', type: 'boolean', initialValue: true, description: 'Décochez pour retirer l’œuvre du site sans la supprimer.' }),
   ],
   orderings: [{ title: 'Numéro de lot', name: 'lot', by: [{ field: 'lot', direction: 'asc' }] }],
