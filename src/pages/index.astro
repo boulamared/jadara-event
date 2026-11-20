@@ -13,7 +13,6 @@ const catLabel = (id: string) => categories.find((c) => c.id === id)?.label ?? '
 const artistName = (id: string) => artists.find((a) => a.id === id)?.name ?? '';
 const cats = categories.map((c) => ({ ...c, count: lots.filter((l) => l.category === c.id).length })).filter((c) => c.count);
 const activeArtists = artists.map((a) => ({ ...a, count: lots.filter((l) => l.artist === a.id).length })).filter((a) => a.count);
-const donate = s.donationUrl || '#oeuvres';
 
 // Si la photo du hero est celle d'un lot, on crédite l'artiste et on ouvre sa fiche.
 // Le fichier du hero porte le nom de l'artiste (ex. /img/guyard.webp) ; avec Sanity, les URL des lots diffèrent.
@@ -58,7 +57,7 @@ const clientData = { eventDate: s.eventDate, dateLabel: s.dateLabel, siteUrl: or
     <button data-partner="agile" aria-label="Agile en Med : en savoir plus"><img src="/img/logo-agile.png" alt="" width="640" height="234" style="--h:40px"></button>
     <button data-partner="maltem" aria-label="Maltem Africa : en savoir plus"><img src="/img/logo-maltem.png" alt="" width="640" height="189" style="--h:30px"></button>
   </div>
-  <a class="pill light sm" href={donate}>Faire un don</a>
+  <button class="pill light sm" data-donate aria-haspopup="dialog">Faire un don</button>
 </div></header>
 
 <main id="top">
@@ -177,6 +176,22 @@ const clientData = { eventDate: s.eventDate, dateLabel: s.dateLabel, siteUrl: or
     </div>
   </div>
 )}
+
+<!-- Faire un don : contact direct avec Jadara -->
+<div class="scrim" id="donateScrim" aria-hidden="true">
+  <div class="modal partner" role="dialog" aria-modal="true" aria-labelledby="donateTitle">
+    <button class="x" data-close aria-label="Fermer"><Fragment set:html={X} /></button>
+    <div class="plogo"><img src="/img/logo-jadara.png" alt=""></div>
+    <div class="eyebrow" style="margin-bottom:8px">Faire un don</div>
+    <h2 id="donateTitle">Contactez Jadara directement</h2>
+    <p class="sub">Pour faire un don ou obtenir plus d'informations, écrivez ou appelez l'association : elle vous répondra personnellement.</p>
+    <div class="plinks">
+      {s.donationUrl && <a class="pill dark sm" href={s.donationUrl} target="_blank" rel="noopener noreferrer">Donner en ligne</a>}
+      <a class="pill dark sm" href="mailto:contact@jadara.foundation?subject=Don%20%C2%B7%20Vente%20solidaire%20Jadara"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7 8 6 8-6"/></svg>contact@jadara.foundation</a>
+      <a class="pill light sm" href="tel:+212522861880"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"/></svg>+212 522 861 880</a>
+    </div>
+  </div>
+</div>
 
 <!-- Fiche partenaire -->
 <div class="scrim" id="partnerScrim" aria-hidden="true">

@@ -219,8 +219,9 @@ $('#closeSel').addEventListener('click', () => { setDrawer(false); $('#openSel')
 
 /* ---------- Événements ---------- */
 document.addEventListener('click', (e) => {
-  const t = e.target.closest('[data-like],[data-open],[data-close],[data-partner]');
+  const t = e.target.closest('[data-like],[data-open],[data-close],[data-partner],[data-donate]');
   if (!t) return;
+  if ('donate' in t.dataset) return openScrim($('#donateScrim'));
   if (t.dataset.partner) return void openPartner(t.dataset.partner);
   if (t.dataset.like) return void toggleLike(t.dataset.like);
   if (t.dataset.open) { openLotId = t.dataset.open; renderLotModal(); return openScrim($('#lotScrim')); }
