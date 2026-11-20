@@ -71,7 +71,7 @@ function syncLikes() {
   $('#selList').innerHTML = items.length
     ? items.map((l) => '<li><img src="' + esc(l.image) + '" alt=""><div><b>' + esc(l.title) + '</b>Lot ' + l.lot + ' · ' + esc(artistName(l)) + '</div><button data-like="' + esc(l.id) + '" aria-label="Retirer ' + esc(l.title) + ' de ma sélection">' + X + '</button></li>').join('')
     : '<li style="border:0;color:var(--muted)">Votre sélection est vide. Touchez le cœur d\'une œuvre pour la retrouver ici.</li>';
-  $('#selFoot').textContent = contact && items.length ? "Nous vous écrirons à " + contact.email + " avant l'ouverture des enchères." : '';
+  $('#selFoot').textContent = contact && items.length ? "Nous vous écrirons à " + contact.email + " avant l'ouverture de la vente." : '';
   $('#selShare').hidden = !items.length;
   if (items.length) {
     const text = selectionText(items);

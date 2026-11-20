@@ -27,14 +27,14 @@ const ROT = [-12, -8, -4, 0, 4, 8, 12];
 const Y = [46, 20, 5, 0, 5, 20, 46];
 
 // Fenêtre d'accueil : texte du CMS, sinon généré à partir du catalogue.
-const popinText = s.popinText || `${lots.length} œuvres offertes par ${activeArtists.length} artistes et donateurs seront mises aux enchères. Présélectionnez dès maintenant celles qui vous plaisent : 100% des enchères sont reversées à Jadara.`;
+const popinText = s.popinText || `${lots.length} œuvres offertes par ${activeArtists.length} artistes et donateurs seront mises en vente. Présélectionnez dès maintenant celles qui vous plaisent : 100% des montants sont reversés à Jadara.`;
 const popinLot = fan[2] ?? lots[0];
 
 const HEART = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19.5 12.6 12 20l-7.5-7.4a5 5 0 1 1 7.5-6.6 5 5 0 1 1 7.5 6.6Z"/></svg>';
 const X = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>';
 
 const title = 'Vente solidaire Jadara · Agile en Med 2026';
-const description = `Vente aux enchères solidaire au profit de Jadara. ${s.dateLabel}. 100% des enchères financent des bourses d'études.`;
+const description = `Expo-vente solidaire au profit de Jadara. ${s.dateLabel}. 100% des montants financent des bourses d'études.`;
 const clientData = { eventDate: s.eventDate, dateLabel: s.dateLabel, siteUrl: origin, categories, artists, lots, partners };
 ---
 <!doctype html>
@@ -82,7 +82,7 @@ const clientData = { eventDate: s.eventDate, dateLabel: s.dateLabel, siteUrl: or
     <h2 class="reveal">Parce que le mérite ne devrait jamais dépendre des moyens.</h2>
     <div class="reveal band-copy">
       <p class="lead">Une expo-vente solidaire portée par Maltem Africa, Agile en Med et Jadara.</p>
-      <p>Des artistes ont offert leurs œuvres pour soutenir des jeunes Marocains talentueux issus de milieux modestes. Chaque enchère finance leurs études : 100 % des montants sont reversés à Jadara.</p>
+      <p>Des artistes ont offert leurs œuvres pour soutenir des jeunes Marocains talentueux issus de milieux modestes. Chaque vente finance leurs études : 100 % des montants sont reversés à Jadara.</p>
     </div>
   </div>
 </section>
@@ -130,7 +130,7 @@ const clientData = { eventDate: s.eventDate, dateLabel: s.dateLabel, siteUrl: or
     <button class="x" data-close aria-label="Fermer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
     <div id="formView">
       <h2 id="leadTitle">Cette œuvre vous plaît ?</h2>
-      <p class="sub">Laissez-nous vos coordonnées : nous vous préviendrons avant l'ouverture des enchères. Une seule fois, pour tous vos coups de cœur.</p>
+      <p class="sub">Laissez-nous vos coordonnées : nous vous préviendrons avant l'ouverture de la vente. Une seule fois, pour tous vos coups de cœur.</p>
       <div class="chosen" id="chosen"></div>
       <form id="leadForm" novalidate>
         <div class="formerr" id="formErr" role="alert" hidden></div>

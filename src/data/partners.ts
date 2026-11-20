@@ -17,7 +17,7 @@ export const partners: Partner[] = [
     name: 'Jadara Foundation',
     role: 'Porte-voix et bénéficiaire',
     logo: '/img/logo-jadara.png',
-    about: "Association marocaine reconnue d'utilité publique (ex-Fondation Marocaine de l'Étudiant). Jadara permet à chaque jeune de construire son avenir avec confiance et ambition, sans que l'origine sociale ou géographique, le handicap ou le genre ne soient un frein. Plus de 4 445 bénéficiaires, 700 bénévoles et 150 partenaires. 100% des enchères de cette vente lui sont reversées.",
+    about: "Association marocaine reconnue d'utilité publique (ex-Fondation Marocaine de l'Étudiant). Jadara permet à chaque jeune de construire son avenir avec confiance et ambition, sans que l'origine sociale ou géographique, le handicap ou le genre ne soient un frein. Plus de 4 445 bénéficiaires, 700 bénévoles et 150 partenaires. 100% des montants de cette vente lui sont reversés.",
     website: 'https://jadara.ngo/en/',
     linkedin: 'https://www.linkedin.com/company/jadara-foundation/',
     contact: 'contact@jadara.foundation',
